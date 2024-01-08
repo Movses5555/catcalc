@@ -1,14 +1,16 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Cats } from "../components/cats";
 
 
 export const HomePage = () => {
-  const navigate = useNavigate();
+  const sheetDimensions = useSelector((state) => state.calc.sheetDimensions);
 
 
   return (
     <div>
+      <div className="flex justify-center text-3xl font-bold">
+        Sheet dimensions (sm): {sheetDimensions.length} x {sheetDimensions.width}
+      </div>
       <Cats />
     </div>
   );

@@ -14,10 +14,11 @@ export const calcReducer = createSlice({
   name: 'calc',
   initialState: {
     sheetDimensions: {
-        width: 1830,
-        height: 3630
+      length: 3630,
+      width: 1830,
     },
     cuts: [],
+    loadingAddNewCutButton: false,
     products: [],
     product: {},
     basket: [],
@@ -31,6 +32,11 @@ export const calcReducer = createSlice({
     error: null,
   },
   reducers: {
+    addNewCut: (state, action) => {
+      const newCut = action.payload;
+      console.log('newCut', newCut);
+      state.cuts = [...state.cuts, newCut];
+    },
     changeBasketProductCount: (state, action) => {
       const { _id, isIncrement } = action.payload;
       const basket = state.basket;
@@ -209,7 +215,11 @@ export const buyProductAsync = createAsyncThunk('product/buyProduct', async (dat
 });
 
 
-export const { changeBasketProductCount, changeBasketSelectedProduct } = calcReducer.actions
+export const { 
+  addNewCut, 
+  changeBasketProductCount, 
+  changeBasketSelectedProduct 
+} = calcReducer.actions
 
 export default calcReducer.reducer;
 

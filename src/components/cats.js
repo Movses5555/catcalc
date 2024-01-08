@@ -1,3 +1,10 @@
+import { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import {v4 as uuidv4} from 'uuid';
+import {
+  addNewCut
+} from "../redux/calcReducer";
+
 import { Card, Typography, Input, Button } from "@material-tailwind/react";
 import { PlusIcon, PencilIcon } from "@heroicons/react/24/solid";
  
@@ -32,6 +39,33 @@ const TABLE_ROWS = [
 ];
  
 export function Cats() {
+	const [newCut, setNewCut] = useState({length: "", width: "", count: ""});
+	const dispatch = useDispatch();
+  const cuts = useSelector((state) => state.calc.cuts);
+  const sheetDimensions = useSelector((state) => state.calc.sheetDimensions);
+
+	
+
+	const handleChangeNewCut = (name, value) => {
+		setNewCut({
+			...newCut,
+			[name]: value
+		});
+	}
+
+	const handleAddNewCut = () => {
+		const data = {
+			id: uuidv4(),
+			...newCut,
+		};
+		setNewCut({length: "", width: "", count: ""});
+		dispatch(addNewCut(data));
+	}
+
+	console.log('====================================');
+	console.log('newCut', newCut);
+	console.log('cuts', cuts);
+	console.log('====================================');
   return (
     <div className="p-20">
       <Card className="h-full w-full">
@@ -58,17 +92,31 @@ export function Cats() {
 					</thead>
 					<tbody>
 						{
-							TABLE_ROWS.map(({ name, job, date }, index) => {
+							cuts.map((item, index) => {
 								return (
 									<CatItem
-										key={ name }
+										key={ item.id }
 										index={ index }
+										maxLength={ sheetDimensions.length }
+										maxWidth={ sheetDimensions.width }
+										length={item.length}
+										width={item.width}
+										count={item.count}
+										onChangeCut={handleChangeNewCut}
 									/>
 								)
 							})
 						}
 						<CatItem 
 							isLast
+							maxLength={ sheetDimensions.length }
+							maxWidth={ sheetDimensions.width }
+							length={newCut.length}
+							width={newCut.width}
+							count={newCut.count}
+							isDisabled={ !newCut.length || !newCut.width || !newCut.count }
+							onChangeCut={handleChangeNewCut}
+							onAddNewCut={handleAddNewCut}
 						/>
 					</tbody>
         </table>
@@ -80,6 +128,14 @@ export function Cats() {
 const CatItem = ({
 	isLast,
 	index,
+	maxLength,
+	maxWidth,
+	length,
+	width,
+	count,
+	isDisabled,
+	onChangeCut,
+	onAddNewCut,
 }) => {
 	let classes = !!isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 	return (
@@ -96,20 +152,33 @@ const CatItem = ({
 			<td className={classes}>
 				<Input
 					label="Length"
-					className="max-w-24"
+					type="number"
+					name='length'
+					value={ length }
+					min={1}
+					max={maxLength}
+					onBlur={() => {}}
+					onChange={(e) => onChangeCut(e.target.name, e.target.value)}
 				/>
 			</td>
 			<td className={classes}>
 				<Input
 					label="Width"
-					className="max-w-24"
+					type="number"
+					name='width'
+					value={ width }
+					min={1}
+					max={maxWidth}
+					onChange={(e) => onChangeCut(e.target.name, e.target.value)}
 				/>
 			</td>
 			<td className={classes}>
 				<Input
 					label="Quantity"
-					className="max-w-24"
-					value={15}
+					name='count'
+					min={1}
+					value={count}
+					onChange={(e) => onChangeCut(e.target.name, e.target.value)}
 				/>
 			</td>
 			<td className={classes}>
@@ -120,6 +189,8 @@ const CatItem = ({
 							variant="outlined"
 							size="sm"
 							loading={false}
+							disabled={!!isDisabled}
+							onClick={onAddNewCut}
 						>
 							<PlusIcon className="text-blue-500 font-bold h-5 w-5" />
 							Add
