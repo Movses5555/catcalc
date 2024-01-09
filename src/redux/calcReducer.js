@@ -18,6 +18,7 @@ export const calcReducer = createSlice({
       width: 1830,
     },
     cuts: [],
+
     loadingAddNewCutButton: false,
     products: [],
     product: {},
@@ -36,6 +37,23 @@ export const calcReducer = createSlice({
       const newCut = action.payload;
       console.log('newCut', newCut);
       state.cuts = [...state.cuts, newCut];
+    },
+    removeCut: (state, action) => {
+      const id = action.payload;
+      console.log('id', id);
+      const cuts = state.cuts.filter(item => item.id !== id);
+      state.cuts = cuts;
+    },
+    updateCut: (state, action) => {
+      const cut = action.payload;
+      console.log('cut', cut);
+      const cuts = state.cuts.map(item => {
+        if(item.id === cut.id) {
+          return cut;
+        }
+        return item;
+      });
+      state.cuts = cuts;
     },
     changeBasketProductCount: (state, action) => {
       const { _id, isIncrement } = action.payload;
@@ -216,7 +234,9 @@ export const buyProductAsync = createAsyncThunk('product/buyProduct', async (dat
 
 
 export const { 
-  addNewCut, 
+  addNewCut,
+  removeCut,
+  updateCut,
   changeBasketProductCount, 
   changeBasketSelectedProduct 
 } = calcReducer.actions
