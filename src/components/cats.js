@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {v4 as uuidv4} from 'uuid';
 import {
@@ -11,7 +11,7 @@ import { Card, Typography, Input, Button } from "@material-tailwind/react";
 import { IconButton } from "@material-tailwind/react";
 import { PlusIcon, PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
-import { data, sorting } from '../utils'
+import { run } from '../utils'
  
 const TABLE_HEAD = ["No.", "Length (sm)", "Width (sm)", "Quantity", ""];
  
@@ -46,10 +46,15 @@ const TABLE_ROWS = [
 export function Cats() {
 	const [newCut, setNewCut] = useState({length: "", width: "", count: ""});
 	const [editableCut, setEditableCut] = useState({length: "", width: "", count: ""});
+	const [fitData, setFitData] = useState([]);
 	const dispatch = useDispatch();
 	const cuts = useSelector((state) => state.calc.cuts);
 	const sheetDimensions = useSelector((state) => state.calc.sheetDimensions);
 
+	useEffect(() => {
+		let data = run();
+		setFitData(data);
+	}, [])
 	
 
 	const handleChangeNewCut = (name, value) => {
@@ -90,12 +95,38 @@ export function Cats() {
 	}
 
 	console.log('====================================');
-	console.log('cuts', cuts);
+	console.log('fitData=========', fitData);
 	console.log('====================================');
 	
-	console.log('data', data);
-	const dd = sorting(data);
-	console.log('dddddddddd', data);
+	const colors =  [ "#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF" ];
+	return (
+		<div className="p-20">
+      		<Card className="h-[1830px] w-[3630px] rounded-none bg-blue-gray-50 relative">
+				{
+					fitData.map((item, index) => {
+						console.log('item===========', item)
+						return (
+							<div
+								key={item.id}
+								style={{
+									width: `${item.length}px`,
+									height: `${item.width}px`,
+									background: colors[index],
+									position: 'absolute',
+									top: item.fit.x,
+									right: item.fit.y
+								}}
+								className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
+							>
+								{item.length} x {item.width}
+							</div>
+						)
+					})
+				}
+			</Card>
+		</div>
+	)
+	
   return (
     <div className="p-20">
       <Card className="h-full w-full">
