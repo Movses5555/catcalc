@@ -95,35 +95,51 @@ export function Cats() {
 	}
 
 	console.log('====================================');
+	console.log('');
 	console.log('fitData=========', fitData);
 	console.log('====================================');
 	
-	const colors =  [ "#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF" ];
+	const colors =  [ 
+		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+	];
 	return (
 		<div className="p-20">
-      		<Card className="h-[1830px] w-[3630px] rounded-none bg-blue-gray-50 relative">
-				{
-					fitData.map((item, index) => {
-						console.log('item===========', item)
-						return (
-							<div
-								key={item.id}
-								style={{
-									width: `${item.length}px`,
-									height: `${item.width}px`,
-									background: colors[index],
-									position: 'absolute',
-									top: item.fit.x,
-									right: item.fit.y
-								}}
-								className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
-							>
-								{item.length} x {item.width}
-							</div>
-						)
-					})
-				}
-			</Card>
+			{
+				fitData.map((sheet, index) => {
+					return (
+						<Card
+							key={index.toString()}
+							className="h-[1830px] w-[3630px] rounded-none bg-blue-gray-50 relative mb-20"
+						>
+							{
+								sheet.map((item, index) => {
+									console.log('item===========', item)
+									return (
+										<div
+											key={item.id + index}
+											style={{
+												height: `${item.h}px`,
+												width: `${item.w}px`,
+												background: colors[index],
+												position: 'absolute',
+												left: item.fit?.x,
+												top: item.fit?.y,
+											}}
+											className='flex items-center justify-center text-3xl'
+											// className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
+										>
+											{item.w} x {item.h}
+										</div>
+									)
+								})
+							}
+						</Card>
+					)
+				})
+			}
 		</div>
 	)
 	
