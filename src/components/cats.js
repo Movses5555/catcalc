@@ -134,8 +134,8 @@ export const Cats = () => {
 			</Card>
 			<Sheets
 				fitData={fitData}
-				width={sheetDimensions.width}
-				height={sheetDimensions.height}
+				width={sheetDimensions.width / 3}
+				height={sheetDimensions.height / 3}
 			/>
 		</div>
   	);
@@ -228,9 +228,9 @@ const CatItem = ({
 							Add
 						</Button>
 					) : (
-						<div className='flex gap-2'>
+						<div className='flex gap-3'>
 							<Button
-								className="flex items-center gap-2"
+								className="flex items-center"
 								variant="outlined"
 								size="sm"
 								onClick={ isEditable ? onSaveCut : onEditCut }
@@ -249,9 +249,10 @@ const CatItem = ({
 							{
 								isEditable && (
 									<Button
-										className="flex items-center gap-2"
-										variant="text"
+										className="flex items-center"
+										variant="outlined"
 										size="sm"
+										color='gray'
 										onClick={ onCancelEditCut }
 									>
 										Cancel
@@ -260,9 +261,10 @@ const CatItem = ({
 							}
 							<IconButton
 								variant="outlined"
+								color='red'
 								onClick={onRemoveCut}
 							>
-								<XMarkIcon className="text-blue-500 font-bold h-5 w-5" />
+								<XMarkIcon className="text-red-500 font-bold h-5 w-5" />
 							</IconButton>
 						</div>
 					)
@@ -282,37 +284,42 @@ const Sheets = ({
 			{
 				fitData.map((sheet, index) => {
 					return (
-						<div className='w-full'>
+						<div
+							key={index.toString()}
+							className='w-full mb-20'
+						>
 							<div className='mb-4'>
 								<span className='text-3xl font-bold'>Sheet {index + 1}</span>
 							</div>
 							<Card
 								key={index.toString()}
 								style={{
-									height: `${height/3}px`,
-									width: `${width/3}px`,
-									// width: `100%`,
+									// height: `${height/3}px`,
+									// width: `${width/3}px`,
 									background: `url(${SheetImage})`,
 									backgroundRepeat: 'no-repeat',
 									backgroundSize: 'cover'
 								}}
-								className={`h-[${height/3}px] w-[${width/3}px] rounded-none bg-blue-gray-50 relative mb-20`}
+								className={`h-[${height}px] w-[${width}px] rounded-none bg-blue-gray-50 relative`}
 							>
 								{
 									sheet.map((item, index) => {
+										let itemHeight = Math.floor(item.h/3);
+										let itemWidth = Math.floor(item.w/3);
+										console.log('itemHeight', itemHeight)
+										console.log('itemWidth', itemWidth)
 										return (
 											<div
 												key={item.id + index}
 												style={{
-													height: `${item.h/3}px`,
-													width: `${item.w/3}px`,
-													backgroundColor: "rgba(255, 0, 0, 0.3)",
-													position: 'absolute',
+													height: `${itemHeight}px`,
+													width: `${itemWidth}px`,
 													left: item.fit?.x/3,
 													top: item.fit?.y/3,
+													backgroundColor: "rgba(255, 0, 0, 0.3)",
 												}}
-												className='flex items-center justify-center text-3xl'
-												// className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
+												className='flex items-center justify-center text-3xl absolute '
+												// className={`w-[${itemWidth}px] h-[${itemHeight}px] bg-[rgba(255, 0, 0, 0.3)]`}
 											>
 												<span className='text-xs'>{item.w} x {item.h}</span>
 											</div>
