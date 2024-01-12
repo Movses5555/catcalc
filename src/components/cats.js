@@ -6,56 +6,28 @@ import {
   removeCut,
   updateCut,
 } from "../redux/calcReducer";
+import { run } from '../utils'
 
 import { Card, Typography, Input, Button } from "@material-tailwind/react";
 import { IconButton } from "@material-tailwind/react";
 import { PlusIcon, PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import SheetImage from "../assets/images/sheet.jpg"
 
-import { run } from '../utils'
  
 const TABLE_HEAD = ["No.", "Length (sm)", "Width (sm)", "Quantity", ""];
  
-const TABLE_ROWS = [
-  {
-    name: "John Michael",
-    job: "Manager",
-    date: "23/04/18",
-  },
-  {
-    name: "Alexa Liras",
-    job: "Developer",
-    date: "23/04/18",
-  },
-  {
-    name: "Laurent Perrier",
-    job: "Executive",
-    date: "19/09/17",
-  },
-  {
-    name: "Michael Levi",
-    job: "Developer",
-    date: "24/12/08",
-  },
-  {
-    name: "Richard Gran",
-    job: "Manager",
-    date: "04/10/21",
-  },
-];
- 
 export const Cats = () => {
-	const [newCut, setNewCut] = useState({length: "", width: "", count: ""});
-	const [editableCut, setEditableCut] = useState({length: "", width: "", count: ""});
+	const [newCut, setNewCut] = useState({height: "", width: "", count: ""});
+	const [editableCut, setEditableCut] = useState({height: "", width: "", count: ""});
 	const [fitData, setFitData] = useState([]);
 	const dispatch = useDispatch();
 	const cuts = useSelector((state) => state.calc.cuts);
 	const sheetDimensions = useSelector((state) => state.calc.sheetDimensions);
 
 	useEffect(() => {
-		let data = run();
+		let data = run([...cuts]);
 		setFitData(data);
-	}, [])
+	}, [cuts])
 	
 
 	const handleChangeNewCut = (name, value) => {
@@ -70,7 +42,7 @@ export const Cats = () => {
 			id: uuidv4(),
 			...newCut,
 		};
-		setNewCut({length: "", width: "", count: ""});
+		setNewCut({height: "", width: "", count: ""});
 		dispatch(addNewCut(data));
 	}
 
@@ -90,25 +62,17 @@ export const Cats = () => {
 		});
 	}
 
-	const handleSaveCut = () => {
-		dispatch(updateCut(editableCut));
-		setEditableCut({length: "", width: "", count: ""});
+	const handleCancelEditCut = () => {
+		setEditableCut({height: "", width: "", count: ""});
 	}
 
-	console.log('====================================');
-	console.log('');
-	console.log('fitData=========', fitData);
-	console.log('====================================');
-	
-	const colors =  [ 
-		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-	];
+	const handleSaveCut = () => {
+		dispatch(updateCut(editableCut));
+		setEditableCut({height: "", width: "", count: ""});
+	}
 	
   	return (
-    	<div className="p-20">
+    	<div className="p-10 xl:p-20">
       		<Card className="h-full w-full">
         		<table className="w-full min-w-max table-auto text-left">
 					<thead>
@@ -135,14 +99,13 @@ export const Cats = () => {
 						{
 							cuts.map((item, index) => {
 								const isEditable = item.id === editableCut.id;
-								console.log('isEditable', isEditable)
 								return (
 									<CatItem
 										key={ item.id }
 										index={ index }
-										maxLength={ sheetDimensions.length }
+										maxHeight={ sheetDimensions.height }
 										maxWidth={ sheetDimensions.width }
-										length={isEditable ? editableCut.length : item.length}
+										height={isEditable ? editableCut.height : item.height}
 										width={isEditable ? editableCut.width : item.width}
 										count={isEditable ? editableCut.count : item.count}
 										isEditable={isEditable}
@@ -150,18 +113,19 @@ export const Cats = () => {
 										onRemoveCut={() => handleRemoveCut(item.id)}
 										onEditCut={() => handleEditCut(item.id)}
 										onSaveCut={() => handleSaveCut(item.id)}
+										onCancelEditCut={handleCancelEditCut}
 									/>
 								)
 							})
 						}
 						<CatItem 
 							isLast
-							maxLength={ sheetDimensions.length }
+							maxHeight={ sheetDimensions.height }
 							maxWidth={ sheetDimensions.width }
-							length={newCut.length}
+							height={newCut.height}
 							width={newCut.width}
 							count={newCut.count}
-							isDisabled={ !newCut.length || !newCut.width || !newCut.count }
+							isDisabled={ !newCut.height || !newCut.width || !newCut.count }
 							onChangeCut={handleChangeNewCut}
 							onAddNewCut={handleAddNewCut}
 						/>
@@ -170,7 +134,6 @@ export const Cats = () => {
 			</Card>
 			<Sheets
 				fitData={fitData}
-				colors={colors}
 				width={sheetDimensions.width}
 				height={sheetDimensions.height}
 			/>
@@ -181,9 +144,9 @@ export const Cats = () => {
 const CatItem = ({
 	isLast,
 	index,
-	maxLength,
+	maxHeight,
 	maxWidth,
-	length,
+	height,
 	width,
 	count,
 	isDisabled,
@@ -193,6 +156,7 @@ const CatItem = ({
 	onRemoveCut,
 	onEditCut,
 	onSaveCut,
+	onCancelEditCut,
 }) => {
 	let classes = !!isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 	return (
@@ -210,25 +174,34 @@ const CatItem = ({
 				<Input
 					label="Length"
 					type="number"
-					name='length'
-					value={ length }
+					name='width'
+					value={ width }
 					min={1}
-					max={maxLength}
+					max={maxWidth}
 					disabled={!isLast && !isEditable}
-					onBlur={() => {}}
-					onChange={(e) => onChangeCut(e.target.name, e.target.value)}
+					onBlur={(e) => {
+						if(+e.target.value > +maxWidth) {
+							onChangeCut(e.target.name, +maxWidth)
+						}
+					}}
+					onChange={(e) => onChangeCut(e.target.name, +e.target.value)}
 				/>
 			</td>
 			<td className={classes}>
 				<Input
 					label="Width"
 					type="number"
-					name='width'
-					value={ width }
+					name='height'
+					value={ height }
 					min={1}
-					max={maxWidth}
+					max={maxHeight}
 					disabled={!isLast && !isEditable}
-					onChange={(e) => onChangeCut(e.target.name, e.target.value)}
+					onBlur={(e) => {
+						if(+e.target.value > +maxHeight) {
+							onChangeCut(e.target.name, +maxHeight)
+						}
+					}}
+					onChange={(e) => onChangeCut(e.target.name, +e.target.value)}
 				/>
 			</td>
 			<td className={classes}>
@@ -238,7 +211,7 @@ const CatItem = ({
 					min={1}
 					value={count}
 					disabled={!isLast && !isEditable}
-					onChange={(e) => onChangeCut(e.target.name, e.target.value)}
+					onChange={(e) => onChangeCut(e.target.name, +e.target.value)}
 				/>
 			</td>
 			<td className={classes}>
@@ -273,6 +246,18 @@ const CatItem = ({
 									)
 								}
 							</Button>
+							{
+								isEditable && (
+									<Button
+										className="flex items-center gap-2"
+										variant="text"
+										size="sm"
+										onClick={ onCancelEditCut }
+									>
+										Cancel
+									</Button>
+								)
+							}
 							<IconButton
 								variant="outlined"
 								onClick={onRemoveCut}
@@ -289,49 +274,47 @@ const CatItem = ({
 
 const Sheets = ({
 	fitData,
-	colors,
 	width,
 	height,
 }) => {
 	return (
 		<div className="py-20">
-			<div className="flex justify-center text-3xl font-bold">
-				Sheet dimensions (sm): {width} x {height}
-			</div>
 			{
 				fitData.map((sheet, index) => {
 					return (
-						<div>
+						<div className='w-full'>
 							<div className='mb-4'>
 								<span className='text-3xl font-bold'>Sheet {index + 1}</span>
 							</div>
 							<Card
 								key={index.toString()}
 								style={{
-									height: `${height}px`,
-									width: `${width}px`,
-									background: `url(${SheetImage})`
+									height: `${height/3}px`,
+									width: `${width/3}px`,
+									// width: `100%`,
+									background: `url(${SheetImage})`,
+									backgroundRepeat: 'no-repeat',
+									backgroundSize: 'cover'
 								}}
-								className={`h-[${height}px] w-[${width}px] rounded-none bg-blue-gray-50 relative mb-20`}
+								className={`h-[${height/3}px] w-[${width/3}px] rounded-none bg-blue-gray-50 relative mb-20`}
 							>
 								{
 									sheet.map((item, index) => {
-										console.log('item===========', item)
 										return (
 											<div
 												key={item.id + index}
 												style={{
-													height: `${item.h}px`,
-													width: `${item.w}px`,
-													background: colors[index],
+													height: `${item.h/3}px`,
+													width: `${item.w/3}px`,
+													backgroundColor: "rgba(255, 0, 0, 0.3)",
 													position: 'absolute',
-													left: item.fit?.x,
-													top: item.fit?.y,
+													left: item.fit?.x/3,
+													top: item.fit?.y/3,
 												}}
 												className='flex items-center justify-center text-3xl'
 												// className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
 											>
-												{item.w} x {item.h}
+												<span className='text-xs'>{item.w} x {item.h}</span>
 											</div>
 										)
 									})
