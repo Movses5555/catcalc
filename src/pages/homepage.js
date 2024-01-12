@@ -9,7 +9,7 @@ export const HomePage = () => {
   return (
     <div>
       <div className="flex justify-center text-3xl font-bold">
-        Sheet dimensions (sm): {sheetDimensions.length} x {sheetDimensions.width}
+        Sheet dimensions (sm): {sheetDimensions.width} x {sheetDimensions.height}
       </div>
       <Cats />
     </div>

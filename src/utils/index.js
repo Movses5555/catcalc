@@ -1,9 +1,9 @@
 const data = [
     {
         id: '675f3a96-d949-4f3f-898b-8897dae00abd', 
-        width: 1450, 
+        width: 1210, 
         height: 140,
-        count: 4
+        count: 3
     },
     {
         id: 'b1a9eae1-b99e-4a24-8ba0-766f49606dc4', 
@@ -11,17 +11,17 @@ const data = [
         height: 125, 
         count: 4
     },
-    {
-        id: 'b1a9eae1-b99e-4a24-8ba0-766f49606dc5', 
-        width: 480, 
-        height: 120, 
-        count: 7
-    },
+    // {
+    //     id: 'b1a9eae1-b99e-4a24-8ba0-766f49606dc5', 
+    //     width: 480, 
+    //     height: 120, 
+    //     count: 7
+    // },
     {
         id: '2ed1a71f-fdc2-47a6-ab64-326f3a318578', 
         width: 1450, 
         height: 520, 
-        count: 11
+        count: 2
     },
 ];
 
@@ -136,12 +136,12 @@ const splitNode = (node, w, h) => {
     node.used = true;
     node.down  = { 
         x: node.x,
-        y: node.y + h,
+        y: node.y + h + 10,
         w: node.w,
         h: node.h - h
     };
     node.right = {
-        x: node.x + w,
+        x: node.x + w + 10,
         y: node.y,
         w: node.w - w,
         h: h

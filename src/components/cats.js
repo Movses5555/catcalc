@@ -10,6 +10,7 @@ import {
 import { Card, Typography, Input, Button } from "@material-tailwind/react";
 import { IconButton } from "@material-tailwind/react";
 import { PlusIcon, PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import SheetImage from "../assets/images/sheet.jpg"
 
 import { run } from '../utils'
  
@@ -43,7 +44,7 @@ const TABLE_ROWS = [
   },
 ];
  
-export function Cats() {
+export const Cats = () => {
 	const [newCut, setNewCut] = useState({length: "", width: "", count: ""});
 	const [editableCut, setEditableCut] = useState({length: "", width: "", count: ""});
 	const [fitData, setFitData] = useState([]);
@@ -100,53 +101,16 @@ export function Cats() {
 	console.log('====================================');
 	
 	const colors =  [ 
-		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
-		"#EFD279", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
+		"#F00", "#95CBE9", "#024769", "#AFD775", "#2C5700", "#DE9D7F", "#7F9DDE", "#00572C", "#75D7AF", "#694702", "#E9CB95", "#79D2EF",
 	];
-	return (
-		<div className="p-20">
-			{
-				fitData.map((sheet, index) => {
-					return (
-						<Card
-							key={index.toString()}
-							className="h-[1830px] w-[3630px] rounded-none bg-blue-gray-50 relative mb-20"
-						>
-							{
-								sheet.map((item, index) => {
-									console.log('item===========', item)
-									return (
-										<div
-											key={item.id + index}
-											style={{
-												height: `${item.h}px`,
-												width: `${item.w}px`,
-												background: colors[index],
-												position: 'absolute',
-												left: item.fit?.x,
-												top: item.fit?.y,
-											}}
-											className='flex items-center justify-center text-3xl'
-											// className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
-										>
-											{item.w} x {item.h}
-										</div>
-									)
-								})
-							}
-						</Card>
-					)
-				})
-			}
-		</div>
-	)
 	
-  return (
-    <div className="p-20">
-      <Card className="h-full w-full">
-        <table className="w-full min-w-max table-auto text-left">
+  	return (
+    	<div className="p-20">
+      		<Card className="h-full w-full">
+        		<table className="w-full min-w-max table-auto text-left">
 					<thead>
 						<tr>
 							{
@@ -202,10 +166,16 @@ export function Cats() {
 							onAddNewCut={handleAddNewCut}
 						/>
 					</tbody>
-        </table>
-      </Card>
-    </div>
-  );
+				</table>
+			</Card>
+			<Sheets
+				fitData={fitData}
+				colors={colors}
+				width={sheetDimensions.width}
+				height={sheetDimensions.height}
+			/>
+		</div>
+  	);
 }
 
 const CatItem = ({
@@ -314,5 +284,63 @@ const CatItem = ({
 				}
 			</td>
 		</tr>
+	)
+};
+
+const Sheets = ({
+	fitData,
+	colors,
+	width,
+	height,
+}) => {
+	return (
+		<div className="py-20">
+			<div className="flex justify-center text-3xl font-bold">
+				Sheet dimensions (sm): {width} x {height}
+			</div>
+			{
+				fitData.map((sheet, index) => {
+					return (
+						<div>
+							<div className='mb-4'>
+								<span className='text-3xl font-bold'>Sheet {index + 1}</span>
+							</div>
+							<Card
+								key={index.toString()}
+								style={{
+									height: `${height}px`,
+									width: `${width}px`,
+									background: `url(${SheetImage})`
+								}}
+								className={`h-[${height}px] w-[${width}px] rounded-none bg-blue-gray-50 relative mb-20`}
+							>
+								{
+									sheet.map((item, index) => {
+										console.log('item===========', item)
+										return (
+											<div
+												key={item.id + index}
+												style={{
+													height: `${item.h}px`,
+													width: `${item.w}px`,
+													background: colors[index],
+													position: 'absolute',
+													left: item.fit?.x,
+													top: item.fit?.y,
+												}}
+												className='flex items-center justify-center text-3xl'
+												// className={`w-[${item.width}px] h-[${item.width}px] bg-[${colors[index]}]`}
+											>
+												{item.w} x {item.h}
+											</div>
+										)
+									})
+								}
+							</Card>
+						</div>
+					)
+				})
+			}
+		</div>
 	)
 }

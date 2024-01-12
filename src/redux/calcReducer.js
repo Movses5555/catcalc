@@ -14,8 +14,8 @@ export const calcReducer = createSlice({
   name: 'calc',
   initialState: {
     sheetDimensions: {
-      length: 3630,
-      width: 1830,
+      width: 3630,
+      height: 1830,
     },
     cuts: [],
 
