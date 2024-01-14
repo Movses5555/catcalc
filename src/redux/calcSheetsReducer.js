@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 
-export const calcReducer = createSlice({
-  name: 'calc',
+export const calcSheetsReducer = createSlice({
+  name: 'calcSheets',
   initialState: {
     sheetDimensions: {
       width: 3630,
       height: 1830,
     },
+    cattingSheetsCount: 1,
     cuts: [],
   },
   reducers: {
@@ -30,8 +31,11 @@ export const calcReducer = createSlice({
       });
       state.cuts = cuts;
     },
-  },
-  extraReducers: (builder) => {},
+    updateCattingSheetsCount: (state, action) => {
+      const count = action.payload;
+      state.cattingSheetsCount = count;
+    },
+  }
 });
 
 
@@ -39,9 +43,10 @@ export const {
   addNewCut,
   removeCut,
   updateCut,
-} = calcReducer.actions
+  updateCattingSheetsCount,
+} = calcSheetsReducer.actions
 
-export default calcReducer.reducer;
+export default calcSheetsReducer.reducer;
 
 
 

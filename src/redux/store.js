@@ -2,11 +2,11 @@ import {
   configureStore, 
   combineReducers,
 } from '@reduxjs/toolkit';
-import calcReducer from './calcReducer';
+import calcSheetsReducer from './calcSheetsReducer';
 
 
 const rootReducer = combineReducers({
-  calc: calcReducer,
+  calcSheets: calcSheetsReducer,
 });
 
 export const store = configureStore({

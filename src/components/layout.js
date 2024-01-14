@@ -4,7 +4,7 @@ export const Layout = ({
 }) => {
 
   return (
-    <div className="mx-auto max-w-screen-md py-6">
+    <div className="mx-auto max-w-screen-xl pt-6">
       { children }
     </div>
   );

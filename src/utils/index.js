@@ -58,7 +58,7 @@ const findNode = (root, w, h) => {
 
 const splitNode = (node, w, h) => {
     node.used = true;
-    node.down  = { 
+    node.down  = {
         x: node.x,
         y: node.y + h + 5,
         w: node.w,
@@ -83,7 +83,7 @@ const getSheets = (sheetsData, data) => {
     }
 }
 
-export const run = (data) => {
+export const Cutting = (data) => {
     let sheetsData = [];
     const sortingData = sorting(data);
     const newData = changeData(sortingData);
