@@ -9,7 +9,7 @@ export const HomePage = () => {
   return (
     <div>
       <div className="flex justify-center text-3xl">
-        Sheet dimensions (sm): <span className="mx-4 font-bold">{sheetDimensions.width} x {sheetDimensions.height}</span>
+        Sheet dimensions: <span className="mx-4 font-bold">{sheetDimensions.width} x {sheetDimensions.height} (mm)</span>
       </div>
       <div className="mt-10 flex justify-center text-2xl">
         Sheets in cutting <span className="mx-4 font-bold">{cattingSheetsCount}</span>

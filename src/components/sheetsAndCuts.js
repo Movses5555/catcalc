@@ -13,7 +13,7 @@ import { SheetCut } from './SheetCut';
 import { Card, Typography } from "@material-tailwind/react";
 
  
-const TABLE_HEAD = ["No.", "Length (sm)", "Width (sm)", "Quantity", ""];
+const TABLE_HEAD = ["No.", "Length (mm)", "Width (mm)", "Quantity", ""];
  
 export const SheetsAndCuts = () => {
 	const [newCut, setNewCut] = useState({height: "", width: "", count: ""});
